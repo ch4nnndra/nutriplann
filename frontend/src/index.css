@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-tx bg-bg3 font-sans leading-relaxed text-[14px];
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-[6px] px-4 py-2 rounded-r8 text-[13px] font-medium cursor-pointer border border-transparent transition-opacity no-underline;
+  }
+  .btn-t {
+    @apply bg-t text-white hover:opacity-90;
+  }
+  .btn-t-lg {
+    @apply px-7 py-3 text-[15px] rounded-r12;
+  }
+  .btn-p {
+    @apply bg-p text-white hover:opacity-90;
+  }
+  .btn-out {
+    @apply bg-transparent text-tx border-bd2 hover:bg-bg2;
+  }
+  .btn-out-p {
+    @apply bg-transparent text-p border-p100 hover:bg-p50;
+  }
+  .btn-sm {
+    @apply px-[10px] py-[5px] text-[12px];
+  }
+  
+  .card {
+    @apply bg-bg border border-bd rounded-r12 p-4;
+  }
+  .card-t {
+    @apply text-[13px] font-medium text-tx2 mb-3 flex items-center gap-[6px];
+  }
+  
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11px] font-medium;
+  }
+  .b-teal {
+    @apply bg-t50 text-[#085041] border border-t100;
+  }
+  .b-purple {
+    @apply bg-p50 text-p border border-p100;
+  }
+  .b-amber {
+    @apply bg-am50 text-[#633806] border border-am100;
+  }
+  .b-green {
+    @apply bg-[#EAF3DE] text-[#27500A] border border-[#C0DD97];
+  }
+  .b-red {
+    @apply bg-[#FCEBEB] text-[#791F1F] border border-[#F09595];
+  }
+  
+  .sep {
+    @apply h-px bg-bd my-3;
+  }
+  
+  .fg label {
+    @apply block text-[12px] font-medium text-tx2 mb-1;
+  }
+  .fg input, .fg select, .fg textarea, .rev-form input, .rev-form select, .rev-form textarea {
+    @apply w-full px-[10px] py-2 border border-bd2 rounded-r8 text-[13px] text-tx bg-bg outline-none transition-all;
+  }
+  .fg input:focus, .fg select:focus, .fg textarea:focus, .rev-form input:focus, .rev-form select:focus, .rev-form textarea:focus {
+    @apply border-t ring-2 ring-t/10;
+  }
+  .fg {
+    @apply mb-3.5;
+  }
+  
+  .hint {
+    @apply text-[11px] text-tx3 mt-[3px];
+  }
+  
+  .tgl-row {
+    @apply flex items-center justify-between px-[10px] py-2 bg-bg2 rounded-r8 border border-bd text-[13px];
+  }
+  .tgl {
+    @apply w-9 h-5 bg-bd2 rounded-full cursor-pointer relative transition-colors border-none shrink-0;
+  }
+  .tgl.on {
+    @apply bg-t;
+  }
+  .tgl::after {
+    content: '';
+    @apply absolute top-[3px] left-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform;
+  }
+  .tgl.on::after {
+    @apply translate-x-4;
+  }
+}

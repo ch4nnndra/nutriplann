@@ -1,0 +1,727 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>NutriPlan</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --t:#0F6E56;--t50:#E1F5EE;--t100:#9FE1CB;--t200:#5DCAA5;--t400:#1D9E75;
+  --p:#3C3489;--p50:#EEEDFE;--p100:#CECBF6;--p200:#AFA9EC;--p400:#7F77DD;
+  --am:#BA7517;--am50:#FAEEDA;--am100:#FAC775;
+  --bg:#FFFFFF;--bg2:#F8F9FA;--bg3:#F1F3F5;
+  --tx:#1A1A1A;--tx2:#555F6D;--tx3:#9AA3AC;
+  --bd:#E5E7EB;--bd2:#D1D5DB;
+  --r8:8px;--r12:12px;--r16:16px;--r20:20px;
+}
+body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;color:var(--tx);background:var(--bg3);line-height:1.5}
+.pg{display:none}.pg.on{display:block}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r8);font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:opacity .15s;text-decoration:none;font-family:inherit}
+.btn-t{background:var(--t);color:#fff}.btn-t:hover{opacity:.88}
+.btn-t-lg{padding:12px 28px;font-size:15px;border-radius:var(--r12)}
+.btn-p{background:var(--p);color:#fff}.btn-p:hover{opacity:.88}
+.btn-out{background:transparent;color:var(--tx);border-color:var(--bd2)}.btn-out:hover{background:var(--bg2)}
+.btn-out-p{background:transparent;color:var(--p);border-color:var(--p100)}.btn-out-p:hover{background:var(--p50)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.card{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12);padding:16px}
+.card-t{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:500}
+.b-teal{background:var(--t50);color:#085041;border:1px solid var(--t100)}
+.b-purple{background:var(--p50);color:#3C3489;border:1px solid var(--p100)}
+.b-amber{background:var(--am50);color:#633806;border:1px solid var(--am100)}
+.b-green{background:#EAF3DE;color:#27500A;border:1px solid #C0DD97}
+.b-red{background:#FCEBEB;color:#791F1F;border:1px solid #F09595}
+.sep{height:1px;background:var(--bd);margin:12px 0}
+label{display:block;font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:4px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--bd2);border-radius:var(--r8);font-size:13px;font-family:inherit;color:var(--tx);background:var(--bg);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--t);box-shadow:0 0 0 2px rgba(15,110,86,.12)}
+.fg{margin-bottom:14px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.hint{font-size:11px;color:var(--tx3);margin-top:3px}
+.rb-group{display:flex;gap:8px}
+.rb-opt{flex:1;padding:7px 10px;border:1px solid var(--bd2);border-radius:var(--r8);font-size:12px;font-weight:500;cursor:pointer;text-align:center;color:var(--tx2);transition:all .12s}
+.rb-opt.sel{border-color:var(--t);background:var(--t50);color:#085041}
+.tgl-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg2);border-radius:var(--r8);border:1px solid var(--bd);font-size:13px}
+.tgl{width:36px;height:20px;background:var(--bd2);border-radius:100px;cursor:pointer;position:relative;transition:background .2s;border:none;flex-shrink:0}
+.tgl.on{background:var(--t)}.tgl::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s}
+.tgl.on::after{transform:translateX(16px)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:8px 12px;text-align:left;font-size:11px;font-weight:500;color:var(--tx2);background:var(--bg2);border-bottom:1px solid var(--bd);white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+td{padding:10px 12px;border-bottom:1px solid var(--bd);color:var(--tx);vertical-align:middle}
+tr:hover td{background:var(--bg2)}
+tr:last-child td{border-bottom:none}
+.sim-bar{display:flex;align-items:center;gap:8px}
+.sim-track{flex:1;height:5px;background:var(--bg3);border-radius:100px;overflow:hidden}
+.sim-fill{height:100%;border-radius:100px;background:var(--t);transition:width .9s}
+.sim-pct{font-size:11px;font-weight:500;color:#085041;min-width:32px;text-align:right}
+.mc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mc{background:var(--bg2);border-radius:var(--r8);padding:12px;text-align:center}
+.mc-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);margin-bottom:4px}
+.mc-val{font-size:22px;font-weight:500;line-height:1}
+.mc-unit{font-size:10px;color:var(--tx3)}
+.nav-public{height:52px;background:var(--bg);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:40}
+.nav-logo{font-size:16px;font-weight:600;color:var(--t);cursor:pointer;display:flex;align-items:center;gap:6px}
+.nav-links{flex:1;display:flex;gap:4px}
+.nl{padding:5px 10px;font-size:13px;color:var(--tx2);border-radius:var(--r8);cursor:pointer;font-weight:500}
+.nl:hover{background:var(--bg2);color:var(--tx)}
+/* Hero */
+.hero-wrap{padding:60px 32px 56px;background:var(--bg2)}
+.hero-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.hero-ey{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#085041;background:var(--t50);padding:4px 10px;border-radius:100px;display:inline-block;margin-bottom:14px}
+.hero-h{font-size:36px;font-weight:600;line-height:1.15;letter-spacing:-.02em;margin-bottom:14px}
+.hero-h span{color:var(--t)}
+.hero-sub{font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:24px}
+.hero-btns{display:flex;gap:10px;align-items:center}
+/* Strip */
+.strip{background:var(--t);padding:16px 32px;display:flex;justify-content:center;gap:60px}
+.strip-s{text-align:center;color:#fff}
+.strip-n{font-size:24px;font-weight:600}
+.strip-l{font-size:11px;opacity:.75;margin-top:2px}
+/* Section */
+.sec{padding:48px 32px}
+.sec-inner{max-width:960px;margin:0 auto}
+.sec-hd{text-align:center;margin-bottom:32px}
+.sec-ey{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#085041;background:var(--t50);padding:4px 10px;border-radius:100px;display:inline-block;margin-bottom:10px}
+.sec-h{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:8px}
+.sec-sub{font-size:14px;color:var(--tx2);max-width:480px;margin:0 auto}
+.how-g{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.how-c{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12);padding:20px 16px;text-align:center;transition:border-color .15s}
+.how-c:hover{border-color:var(--t100)}
+.how-icon{width:44px;height:44px;background:var(--t50);color:var(--t);border-radius:var(--r8);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:20px}
+.how-n{font-size:10px;font-weight:600;color:var(--t100);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.how-t{font-size:13px;font-weight:600;margin-bottom:4px}
+.how-d{font-size:12px;color:var(--tx2);line-height:1.6}
+.feat-g{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat-c{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12);padding:20px}
+.feat-icon{width:40px;height:40px;border-radius:var(--r8);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.feat-t{font-size:13px;font-weight:600;margin-bottom:6px}
+.feat-d{font-size:12px;color:var(--tx2);line-height:1.7}
+/* Footer */
+.footer{background:var(--bg);border-top:1px solid var(--bd);padding:24px 32px}
+.fi{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:32px;font-size:12px;color:var(--tx2)}
+/* Input */
+.inp-wrap{background:var(--bg2);min-height:calc(100vh - 52px)}
+.inp-inner{max-width:680px;margin:0 auto;padding:24px 20px}
+.stpr{display:flex;padding:16px 24px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.st-item{flex:1;display:flex;align-items:center;gap:8px;position:relative}
+.st-item:not(:last-child)::after{content:'';position:absolute;left:120px;right:0;top:50%;height:1px;background:var(--bd);z-index:0}
+.st-item.done:not(:last-child)::after{background:var(--t100)}
+.st-num{width:26px;height:26px;border-radius:50%;background:var(--bg3);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;color:var(--tx3);z-index:1;flex-shrink:0;transition:all .2s}
+.st-item.act .st-num{background:var(--t);color:#fff}
+.st-item.done .st-num{background:var(--t);color:#fff}
+.st-lbl{font-size:11px;font-weight:500;color:var(--tx3);z-index:1;white-space:nowrap}
+.st-item.act .st-lbl{color:#085041}
+.st-item.done .st-lbl{color:var(--tx2)}
+.form-sec{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12);padding:20px;margin-bottom:12px}
+.fsec-h{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.fsec-h::after{content:'';flex:1;height:1px;background:var(--t50)}
+.bmi-box{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r8);padding:12px;text-align:center;margin-top:8px}
+.bmi-v{font-size:28px;font-weight:600;line-height:1}
+.bmi-cat{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.step-cnt{display:none}.step-cnt.on{display:block}
+.fnav{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-top:1px solid var(--bd);margin-top:8px}
+/* Result */
+.res-wrap{min-height:100vh;background:var(--bg2)}
+.res-inner{max-width:1040px;margin:0 auto;padding:24px}
+.res-header{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.rec-card{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12);padding:20px}
+.meal-nm{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:12px 0 8px}
+.pat-row{display:grid;grid-template-columns:110px 1fr;gap:4px;padding:5px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.pat-row:last-child{border-bottom:none}
+.pk{color:var(--tx3);font-weight:500}.pv{color:var(--tx)}
+.banner{padding:10px 14px;border-radius:var(--r8);display:flex;align-items:flex-start;gap:8px;font-size:12px}
+.ban-am{background:var(--am50);border:1px solid var(--am100);color:#633806}
+.ban-g{background:#EAF3DE;border:1px solid #C0DD97;color:#27500A}
+.res-actions{display:flex;gap:10px;justify-content:flex-end;padding:16px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12)}
+/* Login */
+.login-page{background:var(--p);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.login-card{background:var(--bg);border-radius:var(--r20);padding:36px 32px;width:380px}
+.login-logo{font-size:15px;font-weight:600;color:var(--p);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.login-h{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--tx2);margin-bottom:24px}
+/* Expert layout */
+.exp-layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:var(--p);flex-shrink:0;display:flex;flex-direction:column}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
+.sb-logo-nm{font-size:15px;font-weight:600;color:#fff}
+.sb-logo-sub{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
+.sb-sec{padding:12px 14px 4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.35)}
+.sb-link{display:flex;align-items:center;gap:8px;padding:9px 12px;margin:1px 6px;border-radius:var(--r8);font-size:13px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s}
+.sb-link:hover{background:rgba(255,255,255,.12);color:#fff}
+.sb-link.on{background:rgba(255,255,255,.18);color:#fff;font-weight:500}
+.sb-bottom{margin-top:auto;padding:12px 6px;border-top:1px solid rgba(255,255,255,.12)}
+.exp-main{flex:1;padding:24px 28px;background:var(--bg2)}
+.exp-hd{margin-bottom:20px}
+.exp-title{font-size:20px;font-weight:600;letter-spacing:-.02em}
+.exp-sub{font-size:12px;color:var(--tx2);margin-top:2px}
+.stats-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-c{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12);padding:16px}
+.stat-ico{width:36px;height:36px;border-radius:var(--r8);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px}
+.stat-n{font-size:28px;font-weight:600;line-height:1;margin-bottom:3px}
+.stat-l{font-size:11px;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.stat-t{font-size:11px;color:#3B6D11;margin-top:4px}
+.dash-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hb-item{margin-bottom:10px}
+.hb-lbl{font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:4px;display:flex;justify-content:space-between}
+.hb-track{height:7px;background:var(--bg3);border-radius:100px;overflow:hidden}
+.hb-fill{height:100%;border-radius:100px;background:var(--p400);transition:width 1s}
+.filt-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;padding:12px 16px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--r8)}
+.filt-row input,.filt-row select{width:auto;flex:0 0 auto}
+.filt-space{flex:1}
+.panel{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r12);overflow:hidden}
+.ph{padding:12px 14px;background:var(--bg2);border-bottom:1px solid var(--bd);font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px}
+.pb{padding:14px;max-height:70vh;overflow-y:auto}
+.drow{display:grid;grid-template-columns:110px 1fr;gap:4px;padding:5px 0;border-bottom:1px solid var(--bd);font-size:11px}
+.drow:last-child{border-bottom:none}
+.dk{color:var(--tx3);font-weight:500}.dv{color:var(--tx)}
+.rev-form input,.rev-form select,.rev-form textarea{margin-bottom:12px}
+.pg-row{display:flex;gap:4px;justify-content:center;margin-top:14px}
+.pg-b{width:30px;height:30px;border-radius:var(--r8);border:1px solid var(--bd2);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;color:var(--tx2)}
+.pg-b.on{background:var(--p);color:#fff;border-color:var(--p)}
+.pg-b:hover:not(.on){background:var(--bg2)}
+</style>
+
+<!-- HOME -->
+<div class="pg on" id="pg-home">
+  <nav class="nav-public">
+    <div class="nav-logo" onclick="nav('home')"><i class="ti ti-leaf" style="font-size:18px"></i>NutriPlan</div>
+    <div class="nav-links">
+      <div class="nl" onclick="scrollTo(0,0)">Beranda</div>
+      <div class="nl">Cara kerja</div>
+      <div class="nl">Tentang</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-out btn-sm" onclick="nav('login')"><i class="ti ti-lock"></i>Portal pakar</button>
+      <button class="btn btn-t btn-sm" onclick="nav('input')">Mulai sekarang</button>
+    </div>
+  </nav>
+
+  <div class="hero-wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-ey">Program diet personal</div>
+        <h1 class="hero-h">Rekomendasi diet <span>tepat</span> untuk kondisi kesehatanmu</h1>
+        <p class="hero-sub">Isi data kesehatanmu sekali — sistem kami menganalisis profil kondisimu dari 1.000+ data klinis dan menghasilkan program diet yang divalidasi langsung oleh pakar gizi sebelum diberikan padamu.</p>
+        <div class="hero-btns">
+          <button class="btn btn-t btn-t-lg" onclick="nav('input')"><i class="ti ti-arrow-right"></i>Mulai rekomendasi saya</button>
+          <button class="btn btn-out" onclick="nav('login')">Masuk sebagai pakar</button>
+        </div>
+      </div>
+      <div>
+        <div style="background:var(--bg);border:1px solid var(--bd);border-radius:var(--r16);padding:20px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:4px;background:var(--t);border-radius:var(--r16) var(--r16) 0 0"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin:4px 0 14px">
+            <div style="width:36px;height:36px;background:var(--t50);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--t)"><i class="ti ti-user"></i></div>
+            <div>
+              <div style="font-size:13px;font-weight:600">Profil: Budi, 45 tahun</div>
+              <div style="font-size:11px;color:var(--tx2)">BMI 27.7 · Diabetes · Overweight</div>
+            </div>
+            <span class="badge b-green" style="margin-left:auto"><i class="ti ti-check"></i>Tervalidasi</span>
+          </div>
+          <div style="background:var(--t50);border-radius:var(--r8);padding:14px;margin-bottom:12px;border:1px solid var(--t100)">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#085041;margin-bottom:4px">Program yang direkomendasikan</div>
+            <div style="font-size:17px;font-weight:600;color:#085041">Diet Rendah Karbohidrat</div>
+            <div style="font-size:11px;color:#0F6E56;margin-top:2px">untuk penderita diabetes dengan berat badan berlebih</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+            <div style="background:var(--bg2);border-radius:var(--r8);padding:8px;text-align:center"><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--tx3);margin-bottom:2px">Kalori</div><div style="font-size:18px;font-weight:600;color:var(--am)">1.800</div><div style="font-size:9px;color:var(--tx3)">kkal</div></div>
+            <div style="background:var(--bg2);border-radius:var(--r8);padding:8px;text-align:center"><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--tx3);margin-bottom:2px">Protein</div><div style="font-size:18px;font-weight:600;color:var(--t)">90</div><div style="font-size:9px;color:var(--tx3)">gram</div></div>
+            <div style="background:var(--bg2);border-radius:var(--r8);padding:8px;text-align:center"><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--tx3);margin-bottom:2px">Karbo</div><div style="font-size:18px;font-weight:600;color:var(--p400)">150</div><div style="font-size:9px;color:var(--tx3)">gram</div></div>
+            <div style="background:var(--bg2);border-radius:var(--r8);padding:8px;text-align:center"><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--tx3);margin-bottom:2px">Lemak</div><div style="font-size:18px;font-weight:600;color:#185FA5">60</div><div style="font-size:9px;color:var(--tx3)">gram</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx2);background:var(--bg2);padding:8px 10px;border-radius:var(--r8)"><i class="ti ti-stethoscope" style="color:var(--p);font-size:14px"></i>Ditinjau dan dikonfirmasi oleh pakar gizi sebelum diberikan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="strip-s"><div class="strip-n">1.000+</div><div class="strip-l">Data klinis referensi</div></div>
+    <div class="strip-s"><div class="strip-n">3</div><div class="strip-l">Program diet tersedia</div></div>
+    <div class="strip-s"><div class="strip-n">100%</div><div class="strip-l">Divalidasi pakar</div></div>
+    <div class="strip-s"><div class="strip-n">6</div><div class="strip-l">Faktor kesehatan dianalisis</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-inner">
+      <div class="sec-hd">
+        <div class="sec-ey">Cara kerja</div>
+        <h2 class="sec-h">Empat langkah menuju program diet yang tepat</h2>
+        <p class="sec-sub">Dari mengisi data kondisimu hingga mendapat program diet yang sudah divalidasi pakar.</p>
+      </div>
+      <div class="how-g">
+        <div class="how-c"><div class="how-icon"><i class="ti ti-clipboard-list"></i></div><div class="how-n">Langkah 1</div><div class="how-t">Isi data kesehatan</div><div class="how-d">Masukkan kondisi kesehatanmu: fisik, riwayat penyakit, gaya hidup, dan preferensi makan.</div></div>
+        <div class="how-c"><div class="how-icon"><i class="ti ti-search"></i></div><div class="how-n">Langkah 2</div><div class="how-t">Analisis pencocokan</div><div class="how-d">Sistem mencocokkan kondisimu dengan profil serupa dari 1.000+ data klinis untuk menghasilkan rekomendasi awal.</div></div>
+        <div class="how-c"><div class="how-icon" style="background:#EEF2FF;color:#4338CA"><i class="ti ti-user-check"></i></div><div class="how-n">Langkah 3</div><div class="how-t">Validasi pakar gizi</div><div class="how-d">Pakar gizi meninjau dan mengkonfirmasi rekomendasi sebelum program diet diberikan padamu.</div></div>
+        <div class="how-c"><div class="how-icon" style="background:#EAF3DE;color:#3B6D11"><i class="ti ti-refresh"></i></div><div class="how-n">Langkah 4</div><div class="how-t">Sistem terus berkembang</div><div class="how-d">Setiap kasus baru yang tervalidasi memperkaya data referensi — rekomendasi semakin akurat dari waktu ke waktu.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="background:var(--bg2);padding-top:36px;padding-bottom:48px">
+    <div class="sec-inner">
+      <div class="sec-hd"><div class="sec-ey">Keunggulan</div><h2 class="sec-h">Mengapa NutriPlan?</h2></div>
+      <div class="feat-g">
+        <div class="feat-c"><div class="feat-icon" style="background:var(--t50);color:var(--t)"><i class="ti ti-heart-rate-monitor"></i></div><div class="feat-t">Dipersonalisasi secara medis</div><div class="feat-d">Mempertimbangkan penyakit kronis, kadar gula, kolesterol, dan tekanan darah — bukan sekadar berat badan.</div></div>
+        <div class="feat-c"><div class="feat-icon" style="background:#EEF2FF;color:#4338CA"><i class="ti ti-stethoscope"></i></div><div class="feat-t">Divalidasi pakar gizi</div><div class="feat-d">Setiap program diet melalui peninjauan pakar sebelum final — bukan output yang langsung diberikan begitu saja.</div></div>
+        <div class="feat-c"><div class="feat-icon" style="background:#EAF3DE;color:#3B6D11"><i class="ti ti-database"></i></div><div class="feat-t">Berbasis data klinis nyata</div><div class="feat-d">Rekomendasi dihasilkan dari pencocokan dengan ribuan profil kesehatan dan program diet yang terbukti efektif.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="fi">
+      <div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px"><i class="ti ti-leaf" style="color:var(--t)"></i> NutriPlan</div>
+        <div>Program Studi Informatika, FMIPA · Universitas Udayana · 2026</div>
+        <div style="margin-top:6px">Kelompok 8 · I Made Aditya · I Putu Tangkas Wedana Putra · I Putu Chandra Ananda Putra.S</div>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:6px;font-size:12px;color:var(--tx)">Navigasi</div>
+        <div style="font-size:12px;line-height:2"><span style="cursor:pointer;color:var(--t)" onclick="nav('input')">Mulai rekomendasi</span><br><span style="cursor:pointer;color:var(--t)" onclick="nav('login')">Portal pakar</span></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- INPUT -->
+<div class="pg" id="pg-input">
+  <nav class="nav-public">
+    <div class="nav-logo" onclick="nav('home')"><i class="ti ti-leaf" style="font-size:18px"></i>NutriPlan</div>
+    <div class="nav-links"><div class="nl" onclick="nav('home')"><i class="ti ti-arrow-left"></i> Kembali ke beranda</div></div>
+    <span class="badge b-teal">Langkah <span id="step-num">1</span> dari 4</span>
+  </nav>
+  <div class="stpr" id="stepper">
+    <div class="st-item act" id="si1"><div class="st-num">1</div><div class="st-lbl">Data pribadi</div></div>
+    <div class="st-item" id="si2"><div class="st-num">2</div><div class="st-lbl">Kondisi medis</div></div>
+    <div class="st-item" id="si3"><div class="st-num">3</div><div class="st-lbl">Gaya hidup</div></div>
+    <div class="st-item" id="si4"><div class="st-num">4</div><div class="st-lbl">Nutrisi &amp; preferensi</div></div>
+  </div>
+  <div class="inp-wrap">
+    <div class="inp-inner">
+      <div class="step-cnt on" id="sc1">
+        <div class="form-sec">
+          <div class="fsec-h"><i class="ti ti-user"></i>Data pribadi</div>
+          <div class="f2">
+            <div class="fg"><label>Usia (tahun) <span style="color:#E24B4A">*</span></label><input type="number" id="age" min="18" max="100" placeholder="Cth: 35"></div>
+            <div class="fg"><label>Jenis kelamin <span style="color:#E24B4A">*</span></label>
+              <div class="rb-group"><div class="rb-opt sel" id="rb-m" onclick="selRb('m')"><i class="ti ti-gender-male"></i>Laki-laki</div><div class="rb-opt" id="rb-f" onclick="selRb('f')"><i class="ti ti-gender-female"></i>Perempuan</div></div>
+            </div>
+          </div>
+          <div class="f2">
+            <div class="fg"><label>Tinggi badan (cm) <span style="color:#E24B4A">*</span></label><input type="number" id="height" min="100" max="250" placeholder="Cth: 170" oninput="calcBmi()"></div>
+            <div class="fg"><label>Berat badan (kg) <span style="color:#E24B4A">*</span></label><input type="number" id="weight" min="20" max="300" placeholder="Cth: 65" oninput="calcBmi()"></div>
+          </div>
+          <div class="fg">
+            <label>Indeks Massa Tubuh / BMI (dihitung otomatis)</label>
+            <div class="bmi-box">
+              <div class="bmi-v" id="bmi-val" style="color:var(--tx3)">—</div>
+              <div class="bmi-cat" id="bmi-cat" style="color:var(--tx3)">Masukkan tinggi dan berat badan</div>
+              <div style="margin-top:10px">
+                <svg viewBox="0 0 280 24" width="280" height="24" style="display:block;margin:0 auto">
+                  <rect x="0" y="8" width="60" height="8" rx="4" fill="#85B7EB"/><rect x="62" y="8" width="70" height="8" rx="4" fill="#5DCAA5"/><rect x="134" y="8" width="70" height="8" rx="4" fill="#FAC775"/><rect x="206" y="8" width="74" height="8" rx="4" fill="#F09595"/>
+                  <text x="30" y="22" text-anchor="middle" font-size="8" fill="#9AA3AC">Kurus</text><text x="97" y="22" text-anchor="middle" font-size="8" fill="#9AA3AC">Normal</text><text x="169" y="22" text-anchor="middle" font-size="8" fill="#9AA3AC">Lebih</text><text x="243" y="22" text-anchor="middle" font-size="8" fill="#9AA3AC">Obesitas</text>
+                  <circle id="bmi-dot" cx="-10" cy="12" r="5" fill="#0F6E56" style="transition:cx .5s"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fnav"><span></span><button class="btn btn-t" onclick="goStep(2)">Selanjutnya <i class="ti ti-arrow-right"></i></button></div>
+      </div>
+
+      <div class="step-cnt" id="sc2">
+        <div class="form-sec">
+          <div class="fsec-h"><i class="ti ti-heart-rate-monitor"></i>Kondisi medis</div>
+          <div class="fg"><label>Kondisi kesehatan saat ini <span style="color:#E24B4A">*</span></label>
+            <select><option>Tidak ada kondisi khusus</option><option>Diabetes</option><option>Hipertensi</option><option>Penyakit jantung</option><option>Obesitas</option><option>Kolesterol tinggi</option></select>
+          </div>
+          <div class="f2">
+            <div class="fg"><label>Tekanan darah sistolik (mmHg)</label><input type="number" placeholder="Cth: 120"><div class="hint">Normal: 90–120 mmHg</div></div>
+            <div class="fg"><label>Tekanan darah diastolik (mmHg)</label><input type="number" placeholder="Cth: 80"><div class="hint">Normal: 60–80 mmHg</div></div>
+          </div>
+          <div class="f2">
+            <div class="fg"><label>Kolesterol total (mg/dL)</label><input type="number" placeholder="Cth: 200"><div class="hint">Normal: &lt;200 mg/dL</div></div>
+            <div class="fg"><label>Gula darah puasa (mg/dL)</label><input type="number" placeholder="Cth: 100"><div class="hint">Normal: 70–99 mg/dL</div></div>
+          </div>
+          <div class="fg"><label>Riwayat penyakit keturunan <span style="color:#E24B4A">*</span></label>
+            <select><option>Tidak ada / tidak tahu</option><option>Risiko rendah</option><option>Risiko sedang</option><option>Risiko tinggi</option></select>
+          </div>
+        </div>
+        <div class="fnav"><button class="btn btn-out" onclick="goStep(1)"><i class="ti ti-arrow-left"></i> Sebelumnya</button><button class="btn btn-t" onclick="goStep(3)">Selanjutnya <i class="ti ti-arrow-right"></i></button></div>
+      </div>
+
+      <div class="step-cnt" id="sc3">
+        <div class="form-sec">
+          <div class="fsec-h"><i class="ti ti-run"></i>Gaya hidup</div>
+          <div class="f3">
+            <div class="fg"><label>Langkah kaki harian</label><input type="number" placeholder="Cth: 5.000"><div class="hint">Rata-rata per hari</div></div>
+            <div class="fg"><label>Frekuensi olahraga/minggu</label><input type="number" min="0" max="7" placeholder="0–7 kali"></div>
+            <div class="fg"><label>Jam tidur per hari</label><input type="number" step="0.5" placeholder="Cth: 7.5"></div>
+          </div>
+          <div class="f2">
+            <div class="fg"><label>Konsumsi alkohol <span style="color:#E24B4A">*</span></label><select><option>Tidak ada</option><option>Sesekali</option><option>Rutin</option></select></div>
+            <div class="fg"><label>Kualitas pola makan saat ini <span style="color:#E24B4A">*</span></label><select><option>Kurang baik</option><option selected>Cukup</option><option>Baik</option></select></div>
+          </div>
+          <div class="tgl-row"><span>Kebiasaan merokok</span><button class="tgl" id="tgl-smoke" onclick="toggleEl(this)"></button></div>
+        </div>
+        <div class="fnav"><button class="btn btn-out" onclick="goStep(2)"><i class="ti ti-arrow-left"></i> Sebelumnya</button><button class="btn btn-t" onclick="goStep(4)">Selanjutnya <i class="ti ti-arrow-right"></i></button></div>
+      </div>
+
+      <div class="step-cnt" id="sc4">
+        <div class="form-sec">
+          <div class="fsec-h"><i class="ti ti-apple"></i>Asupan nutrisi saat ini (opsional)</div>
+          <div class="mc-grid" style="margin-bottom:14px">
+            <div class="mc"><div class="mc-label">Kalori</div><input type="number" placeholder="kkal" style="text-align:center;font-size:16px;font-weight:500;border:none;background:transparent;padding:2px 0;width:100%"></div>
+            <div class="mc"><div class="mc-label">Protein</div><input type="number" placeholder="gram" style="text-align:center;font-size:16px;font-weight:500;border:none;background:transparent;padding:2px 0;width:100%"></div>
+            <div class="mc"><div class="mc-label">Karbohidrat</div><input type="number" placeholder="gram" style="text-align:center;font-size:16px;font-weight:500;border:none;background:transparent;padding:2px 0;width:100%"></div>
+            <div class="mc"><div class="mc-label">Lemak</div><input type="number" placeholder="gram" style="text-align:center;font-size:16px;font-weight:500;border:none;background:transparent;padding:2px 0;width:100%"></div>
+          </div>
+        </div>
+        <div class="form-sec">
+          <div class="fsec-h"><i class="ti ti-heart"></i>Preferensi &amp; pantangan</div>
+          <div class="fg"><label>Alergi makanan</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:400;cursor:pointer"><input type="checkbox" style="width:auto"> Kacang</label>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:400;cursor:pointer"><input type="checkbox" style="width:auto"> Susu</label>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:400;cursor:pointer"><input type="checkbox" style="width:auto"> Gluten</label>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:400;cursor:pointer"><input type="checkbox" style="width:auto"> Seafood</label>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:400;cursor:pointer"><input type="checkbox" style="width:auto"> Telur</label>
+            </div>
+          </div>
+          <div class="f2">
+            <div class="fg"><label>Jenis masakan favorit</label><select><option>Masakan Indonesia</option><option>Mediterania</option><option>Asia Timur</option><option>Barat</option></select></div>
+            <div class="fg"><label>Makanan yang ingin dihindari</label><select><option>Tidak ada</option><option>Makanan manis</option><option>Makanan berlemak</option><option>Makanan asin</option></select></div>
+          </div>
+        </div>
+        <div class="fnav">
+          <button class="btn btn-out" onclick="goStep(3)"><i class="ti ti-arrow-left"></i> Sebelumnya</button>
+          <button class="btn btn-t btn-t-lg" onclick="nav('result')"><i class="ti ti-sparkles"></i>Analisis &amp; dapatkan program diet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="pg" id="pg-result">
+  <nav class="nav-public">
+    <div class="nav-logo" onclick="nav('home')"><i class="ti ti-leaf" style="font-size:18px"></i>NutriPlan</div>
+    <div class="nav-links"><div class="nl" onclick="nav('input')"><i class="ti ti-arrow-left"></i> Ubah data</div></div>
+    <span class="badge b-amber"><i class="ti ti-clock"></i>Menunggu validasi pakar</span>
+  </nav>
+  <div class="res-wrap">
+    <div class="res-inner">
+      <div class="banner ban-am" style="margin-bottom:14px">
+        <i class="ti ti-info-circle" style="font-size:16px;flex-shrink:0;margin-top:1px"></i>
+        <span>Rekomendasi ini sedang ditinjau oleh pakar gizi. Simpan ID kasus <strong>CASE-2026-0042</strong> untuk memantau hasil akhir.</span>
+      </div>
+      <div class="res-header">
+        <div class="card">
+          <div class="card-t"><i class="ti ti-user"></i>Ringkasan data kesehatanmu</div>
+          <div class="pat-row"><div class="pk">Usia</div><div class="pv">45 tahun</div></div>
+          <div class="pat-row"><div class="pk">Jenis kelamin</div><div class="pv">Laki-laki</div></div>
+          <div class="pat-row"><div class="pk">BMI</div><div class="pv">27.68 <span class="badge b-amber" style="font-size:10px">Overweight</span></div></div>
+          <div class="pat-row"><div class="pk">Kondisi</div><div class="pv"><span class="badge b-red" style="font-size:10px">Diabetes</span></div></div>
+          <div class="pat-row"><div class="pk">Tekanan darah</div><div class="pv">135/85 mmHg <span class="badge b-amber" style="font-size:10px">Tinggi</span></div></div>
+          <div class="pat-row"><div class="pk">Kolesterol</div><div class="pv">210 mg/dL</div></div>
+          <div class="pat-row"><div class="pk">Gula darah</div><div class="pv">130 mg/dL</div></div>
+        </div>
+        <div class="rec-card">
+          <div class="card-t"><i class="ti ti-sparkles"></i>Program diet untuk kamu</div>
+          <span class="badge b-amber"><i class="ti ti-clock"></i>Menunggu konfirmasi pakar</span>
+          <div class="meal-nm">Diet Rendah Karbohidrat</div>
+          <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">Program diet rendah karbohidrat yang dioptimalkan untuk manajemen gula darah pada kondisi diabetes dengan status berat badan berlebih.</div>
+          <div class="sep"></div>
+          <div class="card-t"><i class="ti ti-chart-pie"></i>Target nutrisi harian</div>
+          <div class="mc-grid">
+            <div class="mc"><div class="mc-label">Kalori</div><div class="mc-val" style="color:var(--am)">1.800</div><div class="mc-unit">kkal</div></div>
+            <div class="mc"><div class="mc-label">Protein</div><div class="mc-val" style="color:var(--t)">90</div><div class="mc-unit">gram</div></div>
+            <div class="mc"><div class="mc-label">Karbo</div><div class="mc-val" style="color:var(--p400)">150</div><div class="mc-unit">gram</div></div>
+            <div class="mc"><div class="mc-label">Lemak</div><div class="mc-val" style="color:#185FA5">60</div><div class="mc-unit">gram</div></div>
+          </div>
+          <div class="sep"></div>
+          <div style="display:flex;align-items:center;gap:16px">
+            <svg viewBox="0 0 100 100" width="90" height="90">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#E5E7EB" stroke-width="14"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#1D9E75" stroke-width="14" stroke-dasharray="89.8 149.1" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#7F77DD" stroke-width="14" stroke-dasharray="59.9 179" stroke-dashoffset="-89.8" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#185FA5" stroke-width="14" stroke-dasharray="39.7 199.2" stroke-dashoffset="-149.7" transform="rotate(-90 50 50)"/>
+              <text x="50" y="47" text-anchor="middle" font-size="10" font-weight="500" fill="#1A1A1A">Makro</text>
+              <text x="50" y="58" text-anchor="middle" font-size="8" fill="#555F6D">nutrien</text>
+            </svg>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px"><div style="width:10px;height:10px;border-radius:50%;background:#1D9E75;flex-shrink:0"></div><span style="flex:1;color:var(--tx2)">Protein</span><span style="font-weight:500">38%</span></div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px"><div style="width:10px;height:10px;border-radius:50%;background:#7F77DD;flex-shrink:0"></div><span style="flex:1;color:var(--tx2)">Karbohidrat</span><span style="font-weight:500">25%</span></div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px"><div style="width:10px;height:10px;border-radius:50%;background:#185FA5;flex-shrink:0"></div><span style="flex:1;color:var(--tx2)">Lemak</span><span style="font-weight:500">17%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-t"><i class="ti ti-users"></i>Profil dengan kondisi serupa ditemukan sistem</div>
+        <table>
+          <thead><tr><th>#</th><th>Kondisi</th><th>BMI</th><th>Tingkat kemiripan</th><th>Program diet yang cocok</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><span class="badge b-red" style="font-size:10px">Diabetes</span></td><td>27.2</td><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:94%"></div></div><div class="sim-pct">94%</div></div></td><td>Diet Rendah Karbohidrat</td></tr>
+            <tr><td>2</td><td><span class="badge b-red" style="font-size:10px">Diabetes</span></td><td>28.1</td><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:89%"></div></div><div class="sim-pct">89%</div></div></td><td>Diet Rendah Karbohidrat</td></tr>
+            <tr><td>3</td><td><span class="badge b-red" style="font-size:10px">Diabetes</span></td><td>26.5</td><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:85%"></div></div><div class="sim-pct">85%</div></div></td><td>Diet Seimbang</td></tr>
+            <tr><td>4</td><td><span class="badge b-red" style="font-size:10px">Diabetes</span></td><td>29.3</td><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:78%"></div></div><div class="sim-pct">78%</div></div></td><td>Diet Rendah Karbohidrat</td></tr>
+            <tr><td>5</td><td><span class="badge b-amber" style="font-size:10px">Hipertensi</span></td><td>27.8</td><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:71%"></div></div><div class="sim-pct">71%</div></div></td><td>Diet Rendah Sodium</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="res-actions">
+        <button class="btn btn-out btn-sm"><i class="ti ti-printer"></i>Cetak halaman</button>
+        <button class="btn btn-out btn-sm"><i class="ti ti-file-download"></i>Simpan PDF</button>
+        <button class="btn btn-t btn-sm" onclick="nav('input')"><i class="ti ti-refresh"></i>Mulai baru</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="pg" id="pg-login">
+  <div class="login-page">
+    <div class="login-card">
+      <div class="login-logo"><i class="ti ti-leaf" style="color:var(--t)"></i>NutriPlan</div>
+      <div style="display:inline-flex;align-items:center;gap:4px;background:var(--p50);color:var(--p);padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px"><i class="ti ti-shield-check"></i>Portal pakar</div>
+      <h1 class="login-h">Masuk ke akun pakar</h1>
+      <p class="login-sub">Akses dashboard untuk meninjau dan memvalidasi program diet yang direkomendasikan sistem kepada pasien.</p>
+      <div class="fg"><label>Username / Email</label><input type="text" placeholder="pakar@example.com"></div>
+      <div class="fg"><label>Kata sandi</label>
+        <div style="position:relative">
+          <input type="password" id="pwd-inp" placeholder="••••••••">
+          <button onclick="togglePwd()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--tx3);font-size:16px"><i class="ti ti-eye" id="pwd-ico"></i></button>
+        </div>
+      </div>
+      <button class="btn btn-p" style="width:100%;justify-content:center;padding:11px;margin-top:4px;font-size:14px" onclick="nav('dashboard')"><i class="ti ti-login"></i>Masuk ke dashboard</button>
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--tx2)">Bukan pakar? <span style="color:var(--t);cursor:pointer" onclick="nav('home')">Kembali ke beranda</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="pg" id="pg-dashboard">
+  <div class="exp-layout">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-nm"><i class="ti ti-leaf" style="color:#9FE1CB"></i> NutriPlan</div><div class="sb-logo-sub">Portal Pakar</div></div>
+      <div class="sb-sec">Menu utama</div>
+      <div class="sb-link on" onclick="nav('dashboard')"><i class="ti ti-dashboard"></i>Dashboard</div>
+      <div class="sb-link" onclick="nav('pending')"><i class="ti ti-clock"></i>Menunggu tinjauan <span style="background:var(--am);color:#fff;font-size:10px;padding:1px 6px;border-radius:100px;margin-left:auto">8</span></div>
+      <div class="sb-link" onclick="nav('history')"><i class="ti ti-history"></i>Riwayat kasus</div>
+      <div class="sb-sec">Akun</div>
+      <div class="sb-link"><i class="ti ti-user-circle"></i>dr. Wayan Supriana</div>
+      <div class="sb-bottom"><div class="sb-link" onclick="nav('login')"><i class="ti ti-logout"></i>Keluar</div></div>
+    </div>
+    <div class="exp-main">
+      <div class="exp-hd"><div class="exp-title">Dashboard</div><div class="exp-sub">Selamat datang, dr. Wayan Supriana · Kamis, 11 Juni 2026</div></div>
+      <div class="stats-g">
+        <div class="stat-c"><div class="stat-ico" style="background:var(--am50);color:var(--am)"><i class="ti ti-clock"></i></div><div class="stat-n" style="color:var(--am)">8</div><div class="stat-l">Menunggu tinjauan</div><div class="stat-t"><i class="ti ti-arrow-up"></i>+3 hari ini</div></div>
+        <div class="stat-c"><div class="stat-ico" style="background:var(--t50);color:var(--t)"><i class="ti ti-check"></i></div><div class="stat-n" style="color:var(--t)">5</div><div class="stat-l">Tervalidasi hari ini</div><div class="stat-t"><i class="ti ti-arrow-up"></i>+2 vs kemarin</div></div>
+        <div class="stat-c"><div class="stat-ico" style="background:var(--p50);color:var(--p)"><i class="ti ti-database"></i></div><div class="stat-n" style="color:var(--p)">1.137</div><div class="stat-l">Total data referensi</div><div class="stat-t" style="color:var(--tx3)">+137 sejak awal</div></div>
+        <div class="stat-c"><div class="stat-ico" style="background:#E6F1FB;color:#185FA5"><i class="ti ti-stopwatch"></i></div><div class="stat-n" style="color:#185FA5">4.2</div><div class="stat-l">Menit/tinjauan (rata)</div><div class="stat-t" style="color:var(--tx3)">— stabil</div></div>
+      </div>
+      <div class="dash-2col">
+        <div class="card">
+          <div class="card-t"><i class="ti ti-chart-bar"></i>Distribusi program diet (data referensi)</div>
+          <div id="hbars">
+            <div class="hb-item"><div class="hb-lbl"><span>Diet Seimbang</span><span>42%</span></div><div class="hb-track"><div class="hb-fill" style="width:0%" data-w="100%"></div></div></div>
+            <div class="hb-item"><div class="hb-lbl"><span>Diet Rendah Sodium</span><span>32%</span></div><div class="hb-track"><div class="hb-fill" style="width:0%" data-w="76%"></div></div></div>
+            <div class="hb-item"><div class="hb-lbl"><span>Diet Rendah Karbohidrat</span><span>26%</span></div><div class="hb-track"><div class="hb-fill" style="width:0%" data-w="62%"></div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-t" style="justify-content:space-between"><span><i class="ti ti-clock"></i>5 kasus terbaru menunggu tinjauan</span><button class="btn btn-sm btn-out-p" onclick="nav('pending')">Lihat semua</button></div>
+          <table>
+            <thead><tr><th>ID</th><th>Kondisi</th><th>Rekomendasi awal</th><th>Aksi</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:monospace;font-size:11px">CASE-0042</td><td><span class="badge b-red" style="font-size:10px">Diabetes</span></td><td style="font-size:12px">Rendah Karbo</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+              <tr><td style="font-family:monospace;font-size:11px">CASE-0041</td><td><span class="badge b-amber" style="font-size:10px">Hipertensi</span></td><td style="font-size:12px">Rendah Sodium</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+              <tr><td style="font-family:monospace;font-size:11px">CASE-0040</td><td><span class="badge b-teal" style="font-size:10px">Normal</span></td><td style="font-size:12px">Diet Seimbang</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+              <tr><td style="font-family:monospace;font-size:11px">CASE-0039</td><td><span class="badge b-red" style="font-size:10px">Jantung</span></td><td style="font-size:12px">Diet Seimbang</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+              <tr><td style="font-family:monospace;font-size:11px">CASE-0038</td><td><span class="badge b-amber" style="font-size:10px">Obesitas</span></td><td style="font-size:12px">Rendah Karbo</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PENDING -->
+<div class="pg" id="pg-pending">
+  <div class="exp-layout">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-nm"><i class="ti ti-leaf" style="color:#9FE1CB"></i> NutriPlan</div><div class="sb-logo-sub">Portal Pakar</div></div>
+      <div class="sb-sec">Menu utama</div>
+      <div class="sb-link" onclick="nav('dashboard')"><i class="ti ti-dashboard"></i>Dashboard</div>
+      <div class="sb-link on" onclick="nav('pending')"><i class="ti ti-clock"></i>Menunggu tinjauan <span style="background:var(--am);color:#fff;font-size:10px;padding:1px 6px;border-radius:100px;margin-left:auto">8</span></div>
+      <div class="sb-link" onclick="nav('history')"><i class="ti ti-history"></i>Riwayat kasus</div>
+      <div class="sb-bottom"><div class="sb-link" onclick="nav('login')"><i class="ti ti-logout"></i>Keluar</div></div>
+    </div>
+    <div class="exp-main">
+      <div class="exp-hd"><div class="exp-title">Menunggu tinjauan</div><div class="exp-sub">8 program diet menunggu validasi pakar</div></div>
+      <div class="filt-row">
+        <select style="width:160px"><option>Semua kondisi</option><option>Diabetes</option><option>Hipertensi</option><option>Jantung</option><option>Obesitas</option></select>
+        <input type="text" placeholder="Cari ID kasus…" style="width:180px">
+        <div class="filt-space"></div>
+        <span style="font-size:12px;color:var(--tx3)">Tampilkan:</span>
+        <select style="width:80px"><option>10</option><option>20</option><option>50</option></select>
+      </div>
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>#</th><th>ID kasus</th><th>Usia</th><th>Kondisi</th><th>BMI</th><th>Rekomendasi sistem</th><th>Tanggal masuk</th><th>Aksi</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td style="font-family:monospace;font-size:12px">CASE-0042</td><td>45</td><td><span class="badge b-red" style="font-size:10px">Diabetes</span></td><td>27.7 <span style="font-size:10px;color:var(--am)">Overweight</span></td><td style="font-size:12px">Diet Rendah Karbo</td><td style="font-size:12px;color:var(--tx2)">11 Jun 2026</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+            <tr><td>2</td><td style="font-family:monospace;font-size:12px">CASE-0041</td><td>58</td><td><span class="badge b-amber" style="font-size:10px">Hipertensi</span></td><td>31.2 <span style="font-size:10px;color:#A32D2D">Obesitas</span></td><td style="font-size:12px">Diet Rendah Sodium</td><td style="font-size:12px;color:var(--tx2)">11 Jun 2026</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+            <tr><td>3</td><td style="font-family:monospace;font-size:12px">CASE-0040</td><td>32</td><td><span class="badge b-teal" style="font-size:10px">Normal</span></td><td>22.4 <span style="font-size:10px;color:var(--t)">Normal</span></td><td style="font-size:12px">Diet Seimbang</td><td style="font-size:12px;color:var(--tx2)">11 Jun 2026</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+            <tr><td>4</td><td style="font-family:monospace;font-size:12px">CASE-0039</td><td>67</td><td><span class="badge b-red" style="font-size:10px">Jantung</span></td><td>29.8 <span style="font-size:10px;color:var(--am)">Overweight</span></td><td style="font-size:12px">Diet Seimbang</td><td style="font-size:12px;color:var(--tx2)">10 Jun 2026</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+            <tr><td>5</td><td style="font-family:monospace;font-size:12px">CASE-0038</td><td>41</td><td><span class="badge b-amber" style="font-size:10px">Obesitas</span></td><td>34.1 <span style="font-size:10px;color:#A32D2D">Obesitas</span></td><td style="font-size:12px">Diet Rendah Karbo</td><td style="font-size:12px;color:var(--tx2)">10 Jun 2026</td><td><button class="btn btn-sm btn-p" onclick="nav('detail')">Tinjau</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pg-row"><div class="pg-b on">1</div><div class="pg-b">2</div><div class="pg-b">›</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL -->
+<div class="pg" id="pg-detail">
+  <div class="exp-layout">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-nm"><i class="ti ti-leaf" style="color:#9FE1CB"></i> NutriPlan</div><div class="sb-logo-sub">Portal Pakar</div></div>
+      <div class="sb-sec">Menu utama</div>
+      <div class="sb-link" onclick="nav('dashboard')"><i class="ti ti-dashboard"></i>Dashboard</div>
+      <div class="sb-link on" onclick="nav('pending')"><i class="ti ti-clock"></i>Menunggu tinjauan</div>
+      <div class="sb-link" onclick="nav('history')"><i class="ti ti-history"></i>Riwayat kasus</div>
+      <div class="sb-bottom"><div class="sb-link" onclick="nav('login')"><i class="ti ti-logout"></i>Keluar</div></div>
+    </div>
+    <div class="exp-main">
+      <div class="exp-hd" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div class="exp-title">Tinjauan kasus <span style="font-family:monospace;font-size:16px;color:var(--p)">CASE-2026-0042</span></div>
+          <div class="exp-sub">Disubmit 11 Juni 2026 · <span class="badge b-amber" style="font-size:10px"><i class="ti ti-clock"></i>Menunggu tinjauan</span></div>
+        </div>
+        <button class="btn btn-out btn-sm" onclick="nav('pending')"><i class="ti ti-arrow-left"></i>Kembali ke daftar</button>
+      </div>
+      <div style="display:grid;grid-template-columns:260px 1fr 260px;gap:14px;align-items:start">
+        <div class="panel">
+          <div class="ph"><i class="ti ti-user"></i>Data pasien</div>
+          <div class="pb">
+            <div class="drow"><div class="dk">Usia</div><div class="dv">45 thn</div></div>
+            <div class="drow"><div class="dk">Jenis kelamin</div><div class="dv">Laki-laki</div></div>
+            <div class="drow"><div class="dk">Tinggi</div><div class="dv">170 cm</div></div>
+            <div class="drow"><div class="dk">Berat</div><div class="dv">80 kg</div></div>
+            <div class="drow"><div class="dk">BMI</div><div class="dv">27.68 <span class="badge b-amber" style="font-size:10px">OW</span></div></div>
+            <div class="drow"><div class="dk">Kondisi</div><div class="dv"><span class="badge b-red" style="font-size:10px">Diabetes</span></div></div>
+            <div class="drow"><div class="dk">BP Sistolik</div><div class="dv">135 mmHg</div></div>
+            <div class="drow"><div class="dk">BP Diastolik</div><div class="dv">85 mmHg</div></div>
+            <div class="drow"><div class="dk">Kolesterol</div><div class="dv">210 mg/dL</div></div>
+            <div class="drow"><div class="dk">Gula darah</div><div class="dv">130 mg/dL</div></div>
+            <div class="drow"><div class="dk">Risiko genetik</div><div class="dv">Sedang</div></div>
+            <div class="drow"><div class="dk">Alergi</div><div class="dv">Kacang</div></div>
+            <div class="drow"><div class="dk">Langkah/hari</div><div class="dv">4.500</div></div>
+            <div class="drow"><div class="dk">Olahraga</div><div class="dv">3x/minggu</div></div>
+            <div class="drow"><div class="dk">Tidur</div><div class="dv">6.5 jam</div></div>
+            <div class="drow"><div class="dk">Alkohol</div><div class="dv">Sesekali</div></div>
+            <div class="drow"><div class="dk">Merokok</div><div class="dv">Tidak</div></div>
+            <div class="drow"><div class="dk">Pola makan</div><div class="dv">Cukup</div></div>
+            <div class="drow"><div class="dk">Kalori aktual</div><div class="dv">2.100 kkal</div></div>
+            <div class="drow"><div class="dk">Masakan fav</div><div class="dv">Indonesia</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="panel" style="margin-bottom:14px">
+            <div class="ph"><i class="ti ti-sparkles"></i>Rekomendasi dari sistem</div>
+            <div class="pb">
+              <div style="font-size:16px;font-weight:600;margin-bottom:6px">Diet Rendah Karbohidrat</div>
+              <div class="mc-grid" style="margin-bottom:12px">
+                <div class="mc"><div class="mc-label">Kalori</div><div class="mc-val" style="color:var(--am)">1.800</div><div class="mc-unit">kkal</div></div>
+                <div class="mc"><div class="mc-label">Protein</div><div class="mc-val" style="color:var(--t)">90</div><div class="mc-unit">gram</div></div>
+                <div class="mc"><div class="mc-label">Karbo</div><div class="mc-val" style="color:var(--p400)">150</div><div class="mc-unit">gram</div></div>
+                <div class="mc"><div class="mc-label">Lemak</div><div class="mc-val" style="color:#185FA5">60</div><div class="mc-unit">gram</div></div>
+              </div>
+              <div class="card-t" style="margin-bottom:8px"><i class="ti ti-users"></i>5 profil serupa (dasar rekomendasi)</div>
+              <table>
+                <thead><tr><th>Kemiripan</th><th>Program diet</th></tr></thead>
+                <tbody>
+                  <tr><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:94%"></div></div><div class="sim-pct">94%</div></div></td><td style="font-size:11px">Diet Rendah Karbo</td></tr>
+                  <tr><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:89%"></div></div><div class="sim-pct">89%</div></div></td><td style="font-size:11px">Diet Rendah Karbo</td></tr>
+                  <tr><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:85%"></div></div><div class="sim-pct">85%</div></div></td><td style="font-size:11px">Diet Seimbang</td></tr>
+                  <tr><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:78%"></div></div><div class="sim-pct">78%</div></div></td><td style="font-size:11px">Diet Rendah Karbo</td></tr>
+                  <tr><td><div class="sim-bar"><div class="sim-track"><div class="sim-fill" style="width:71%"></div></div><div class="sim-pct">71%</div></div></td><td style="font-size:11px">Diet Rendah Sodium</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="panel rev-form">
+          <div class="ph" style="background:#EEF2FF;color:var(--p);border-bottom-color:var(--p100)"><i class="ti ti-edit"></i>Tinjauan pakar</div>
+          <div class="pb">
+            <div class="fg"><label>Program diet <span style="color:#E24B4A">*</span></label>
+              <select style="border-color:var(--p100)"><option selected>Diet Rendah Karbohidrat</option><option>Diet Seimbang</option><option>Diet Rendah Sodium</option></select>
+            </div>
+            <div class="fg"><label>Kalori (kkal)</label><input type="number" value="1800" style="border-color:var(--p100)"></div>
+            <div class="fg"><label>Protein (gram)</label><input type="number" value="90" style="border-color:var(--p100)"></div>
+            <div class="fg"><label>Karbohidrat (gram)</label><input type="number" value="150" style="border-color:var(--p100)"></div>
+            <div class="fg"><label>Lemak (gram)</label><input type="number" value="60" style="border-color:var(--p100)"></div>
+            <div class="fg"><label>Catatan pakar (opsional)</label><textarea rows="3" placeholder="Catatan klinis atau alasan revisi…" style="border-color:var(--p100);resize:vertical"></textarea></div>
+            <div class="sep"></div>
+            <button class="btn btn-p" style="width:100%;justify-content:center;margin-bottom:8px" onclick="nav('history')"><i class="ti ti-check"></i>Submit revisi &amp; simpan</button>
+            <button class="btn btn-out" style="width:100%;justify-content:center;color:var(--t);border-color:var(--t100)" onclick="nav('history')"><i class="ti ti-circle-check"></i>Konfirmasi tanpa revisi</button>
+            <div style="font-size:11px;color:var(--tx3);margin-top:8px;text-align:center">Kasus akan disimpan ke data referensi sistem</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="pg" id="pg-history">
+  <div class="exp-layout">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-nm"><i class="ti ti-leaf" style="color:#9FE1CB"></i> NutriPlan</div><div class="sb-logo-sub">Portal Pakar</div></div>
+      <div class="sb-sec">Menu utama</div>
+      <div class="sb-link" onclick="nav('dashboard')"><i class="ti ti-dashboard"></i>Dashboard</div>
+      <div class="sb-link" onclick="nav('pending')"><i class="ti ti-clock"></i>Menunggu tinjauan</div>
+      <div class="sb-link on" onclick="nav('history')"><i class="ti ti-history"></i>Riwayat kasus</div>
+      <div class="sb-bottom"><div class="sb-link" onclick="nav('login')"><i class="ti ti-logout"></i>Keluar</div></div>
+    </div>
+    <div class="exp-main">
+      <div class="exp-hd"><div class="exp-title">Riwayat kasus</div><div class="exp-sub">Semua kasus yang sudah tervalidasi dan tersimpan di data referensi</div></div>
+      <div class="filt-row">
+        <select style="width:160px"><option>Semua kondisi</option><option>Diabetes</option><option>Hipertensi</option></select>
+        <select style="width:180px"><option>Semua program diet</option><option>Rendah Karbo</option><option>Rendah Sodium</option><option>Seimbang</option></select>
+        <select style="width:140px"><option>Semua status</option><option>Direvisi</option><option>Tidak direvisi</option></select>
+        <div class="filt-space"></div>
+        <button class="btn btn-out btn-sm"><i class="ti ti-download"></i>Export CSV</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>ID kasus</th><th>Kondisi</th><th>Program diet final</th><th>Direvisi</th><th>Tanggal validasi</th><th>Pakar</th><th></th></tr></thead>
+          <tbody>
+            <tr><td style="font-family:monospace;font-size:12px">CASE-0036</td><td><span class="badge b-red" style="font-size:10px">Diabetes</span></td><td style="font-size:12px;font-weight:500">Diet Rendah Karbohidrat</td><td><span class="badge b-green" style="font-size:10px"><i class="ti ti-check"></i>Ya</span></td><td style="font-size:12px;color:var(--tx2)">10 Jun 2026</td><td style="font-size:12px">dr. Wayan</td><td><button class="btn btn-sm btn-out" onclick="nav('detail')">Detail</button></td></tr>
+            <tr><td style="font-family:monospace;font-size:12px">CASE-0035</td><td><span class="badge b-amber" style="font-size:10px">Hipertensi</span></td><td style="font-size:12px;font-weight:500">Diet Rendah Sodium</td><td><span class="badge b-teal" style="font-size:10px">Tidak</span></td><td style="font-size:12px;color:var(--tx2)">10 Jun 2026</td><td style="font-size:12px">dr. Wayan</td><td><button class="btn btn-sm btn-out" onclick="nav('detail')">Detail</button></td></tr>
+            <tr><td style="font-family:monospace;font-size:12px">CASE-0034</td><td><span class="badge b-teal" style="font-size:10px">Normal</span></td><td style="font-size:12px;font-weight:500">Diet Seimbang</td><td><span class="badge b-teal" style="font-size:10px">Tidak</span></td><td style="font-size:12px;color:var(--tx2)">9 Jun 2026</td><td style="font-size:12px">dr. Wayan</td><td><button class="btn btn-sm btn-out" onclick="nav('detail')">Detail</button></td></tr>
+            <tr><td style="font-family:monospace;font-size:12px">CASE-0033</td><td><span class="badge b-red" style="font-size:10px">Jantung</span></td><td style="font-size:12px;font-weight:500">Diet Seimbang</td><td><span class="badge b-green" style="font-size:10px"><i class="ti ti-check"></i>Ya</span></td><td style="font-size:12px;color:var(--tx2)">9 Jun 2026</td><td style="font-size:12px">dr. Wayan</td><td><button class="btn btn-sm btn-out" onclick="nav('detail')">Detail</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pg-row"><div class="pg-b">‹</div><div class="pg-b on">1</div><div class="pg-b">2</div><div class="pg-b">3</div><div class="pg-b">›</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const pages=['home','input','result','login','dashboard','pending','detail','history'];
+let curStep=1;
+function nav(id){pages.forEach(p=>{const el=document.getElementById('pg-'+p);if(el)el.classList.toggle('on',p===id)});window.scrollTo(0,0);if(id==='dashboard')setTimeout(animBars,200);}
+function goStep(n){document.getElementById('sc'+curStep).classList.remove('on');document.getElementById('si'+curStep).classList.remove('act');if(n>curStep)document.getElementById('si'+curStep).classList.add('done');else document.getElementById('si'+curStep).classList.remove('done');curStep=n;document.getElementById('sc'+n).classList.add('on');document.getElementById('si'+n).classList.add('act');document.getElementById('step-num').textContent=n;window.scrollTo(0,0);}
+function selRb(v){document.getElementById('rb-m').classList.toggle('sel',v==='m');document.getElementById('rb-f').classList.toggle('sel',v==='f');}
+function toggleEl(el){el.classList.toggle('on');}
+function togglePwd(){const i=document.getElementById('pwd-inp'),ico=document.getElementById('pwd-ico');if(i.type==='password'){i.type='text';ico.className='ti ti-eye-off';}else{i.type='password';ico.className='ti ti-eye';}}
+function calcBmi(){const h=parseFloat(document.getElementById('height').value),w=parseFloat(document.getElementById('weight').value),vEl=document.getElementById('bmi-val'),cEl=document.getElementById('bmi-cat'),dot=document.getElementById('bmi-dot');if(!h||!w||h<50||w<10){vEl.textContent='—';cEl.textContent='Masukkan tinggi dan berat badan';vEl.style.color='#9AA3AC';cEl.style.color='#9AA3AC';dot.setAttribute('cx','-10');return;}const bmi=w/((h/100)**2);vEl.textContent=bmi.toFixed(1);let cat,col,cx;if(bmi<18.5){cat='Kurus (Underweight)';col='#185FA5';cx=20;}else if(bmi<25){cat='Normal';col='#0F6E56';cx=97;}else if(bmi<30){cat='Berat lebih (Overweight)';col='#BA7517';cx=169;}else{cat='Obesitas';col='#A32D2D';cx=243;}vEl.style.color=col;cEl.style.color=col;cEl.textContent=cat;dot.setAttribute('cx',cx);dot.setAttribute('fill',col);}
+function animBars(){document.querySelectorAll('#hbars .hb-fill').forEach(el=>{el.style.width=el.getAttribute('data-w');});}
+window.addEventListener('DOMContentLoaded',()=>{nav('home');setTimeout(animBars,500);});
+</script>
+</body></html>
