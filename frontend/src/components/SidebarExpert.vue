@@ -24,7 +24,7 @@
     
     <div class="px-3.5 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-white/35">Akun</div>
     <div class="flex items-center gap-2 px-3 py-[9px] mx-1.5 rounded-r8 text-[13px] text-white/70 cursor-pointer hover:bg-white/10 hover:text-white">
-      <IconUserCircle size="18" /> dr. Wayan Supriana
+      <IconUserCircle size="18" /> dr. Wayan
     </div>
     
     <div class="mt-auto p-1.5 border-t border-white/10">

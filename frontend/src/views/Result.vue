@@ -9,7 +9,7 @@
           <IconArrowLeft size="14" class="inline" /> Ubah data
         </div>
       </div>
-      <span class="badge b-amber"><IconClock size="14" /> Menunggu validasi pakar</span>
+      <span class="badge b-teal"><IconCheck size="14" /> Rekomendasi tersedia</span>
     </nav>
 
     <div v-if="!result" class="p-10 text-center text-tx2">
@@ -17,46 +17,49 @@
     </div>
 
     <div v-else class="max-w-[1040px] mx-auto py-6 px-5">
-      <div class="bg-am50 border border-am100 text-[#633806] p-3 rounded-r8 flex gap-2 text-[12px] mb-4">
-        <IconInfoCircle size="16" class="shrink-0 mt-0.5" />
-        <span>Rekomendasi ini sedang ditinjau oleh pakar gizi. Simpan ID kasus <strong>{{ result.case_id }}</strong> untuk memantau hasil akhir.</span>
-      </div>
 
       <div class="grid grid-cols-2 gap-4 mb-4">
+        <!-- Ringkasan data kesehatan -->
         <div class="card">
           <div class="card-t"><IconUser size="16" /> Ringkasan data kesehatanmu</div>
-          <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
-            <div class="text-tx3 font-medium">Usia</div><div class="text-tx">{{ patient.age }} tahun</div>
+          <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
+            <div class="text-tx3 font-medium">Usia</div>
+            <div class="text-tx">{{ patient.age }} tahun</div>
           </div>
-          <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
-            <div class="text-tx3 font-medium">Jenis kelamin</div><div class="text-tx">{{ patient.gender === 'm' ? 'Laki-laki' : 'Perempuan' }}</div>
+          <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
+            <div class="text-tx3 font-medium">BMI</div>
+            <div class="text-tx">{{ patient.bmi.toFixed(1) }}</div>
           </div>
-          <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
-            <div class="text-tx3 font-medium">BMI</div><div class="text-tx">{{ patient.bmi.toFixed(1) }}</div>
+          <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
+            <div class="text-tx3 font-medium">Jenis penyakit</div>
+            <div class="text-tx capitalize">{{ patient.disease_type === 'none' ? 'Tidak ada' : patient.disease_type }}</div>
           </div>
-          <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
-            <div class="text-tx3 font-medium">Kondisi</div><div class="text-tx capitalize">{{ patient.disease_type }}</div>
+          <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
+            <div class="text-tx3 font-medium">Tekanan darah</div>
+            <div class="text-tx">{{ patient.blood_pressure_sys || '—' }} mmHg</div>
           </div>
-          <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
-            <div class="text-tx3 font-medium">Tekanan darah</div><div class="text-tx">{{ patient.blood_pressure_sys }}/{{ patient.blood_pressure_dia }} mmHg</div>
+          <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
+            <div class="text-tx3 font-medium">Kolesterol</div>
+            <div class="text-tx">{{ patient.cholesterol || '—' }} mg/dL</div>
           </div>
-          <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
-            <div class="text-tx3 font-medium">Kolesterol</div><div class="text-tx">{{ patient.cholesterol }} mg/dL</div>
-          </div>
-          <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 text-[12px]">
-            <div class="text-tx3 font-medium">Gula darah</div><div class="text-tx">{{ patient.glucose }} mg/dL</div>
+          <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 text-[12px]">
+            <div class="text-tx3 font-medium">Glukosa</div>
+            <div class="text-tx">{{ patient.glucose || '—' }} mg/dL</div>
           </div>
         </div>
 
+        <!-- Program diet -->
         <div class="card">
-          <div class="card-t"><IconSparkles size="16" /> Program diet untuk kamu</div>
-          <span class="badge b-amber mb-2"><IconClock size="12" /> Menunggu konfirmasi pakar</span>
-          <div class="text-[20px] font-semibold tracking-tight mt-1 mb-2 capitalize">{{ result.recommendation.replaceAll('_', ' ') }}</div>
-          <div class="text-[12px] text-tx2 mb-3.5">
-            Rekomendasi awal berdasarkan kecocokan profil Anda dengan data klinis. Pakar akan meninjau sebelum disetujui.
+          <div class="card-t"><IconSparkles size="16" /> Program diet untukmu</div>
+          <span class="badge b-teal mb-3"><IconCheck size="12" /> Direkomendasikan sistem</span>
+          <div class="text-[22px] font-semibold tracking-tight capitalize mb-1">
+            {{ result.recommendation.replaceAll('_', ' ') }}
+          </div>
+          <div class="text-[12px] text-tx2 mb-4">
+            Berdasarkan analisis kemiripan profil kondisimu dengan {{ result.similar_cases.length }} data klinis referensi.
           </div>
           <div class="sep"></div>
-          <div class="card-t"><IconChartPie size="16" /> Target nutrisi (Estimasi)</div>
+          <div class="card-t"><IconChartPie size="16" /> Estimasi target nutrisi harian</div>
           <div class="grid grid-cols-4 gap-2">
             <div class="bg-bg2 rounded-r8 p-2 text-center">
               <div class="text-[9px] font-semibold uppercase text-tx3 mb-0.5">Kalori</div>
@@ -82,8 +85,9 @@
         </div>
       </div>
 
+      <!-- Kasus serupa -->
       <div class="card mb-3">
-        <div class="card-t"><IconUsers size="16" /> Profil dengan kondisi serupa (CBR Engine)</div>
+        <div class="card-t"><IconUsers size="16" /> Kasus serupa dari data referensi (CBR)</div>
         <table class="w-full text-[13px] border-collapse">
           <thead>
             <tr>
@@ -124,8 +128,8 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNutriStore } from '@/stores/useNutriStore'
-import { 
-  IconLeaf, IconArrowLeft, IconClock, IconInfoCircle, IconUser,
+import {
+  IconLeaf, IconArrowLeft, IconCheck, IconUser,
   IconSparkles, IconChartPie, IconUsers, IconRefresh
 } from '@tabler/icons-vue'
 

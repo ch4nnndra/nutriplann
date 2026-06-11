@@ -68,7 +68,7 @@
             
             <div class="flex items-center gap-1.5 text-[11px] text-tx2 bg-bg2 px-2.5 py-2 rounded-r8">
               <IconStethoscope class="text-p" size="14" />
-              Ditinjau dan dikonfirmasi oleh pakar gizi sebelum diberikan
+              Berdasarkan knowledge base yang dikurasi oleh ahli gizi
             </div>
           </div>
         </div>
@@ -114,8 +114,8 @@
               <IconUserCheck size="20" />
             </div>
             <div class="text-[10px] font-semibold text-t100 uppercase tracking-widest mb-1.5">Langkah 3</div>
-            <div class="text-[13px] font-semibold mb-1">Validasi pakar gizi</div>
-            <div class="text-[12px] text-tx2 leading-relaxed">Pakar gizi meninjau dan mengkonfirmasi rekomendasi sebelum program diet diberikan padamu.</div>
+            <div class="text-[13px] font-semibold mb-1">Rekomendasi otomatis</div>
+            <div class="text-[12px] text-tx2 leading-relaxed">Sistem menentukan program diet terbaik berdasarkan knowledge base yang telah dikurasi oleh ahli gizi.</div>
           </div>
           
           <div class="bg-bg border border-bd rounded-r12 p-5 text-center hover:border-t100 transition-colors">

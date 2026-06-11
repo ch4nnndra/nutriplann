@@ -15,7 +15,7 @@
           <thead>
             <tr>
               <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">ID Kasus</th>
-              <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Usia/JK</th>
+              <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Usia / BMI</th>
               <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Kondisi Medis</th>
               <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Rekomendasi CBR</th>
               <th class="px-3 py-3 text-right text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Aksi</th>
@@ -24,7 +24,7 @@
           <tbody>
             <tr v-for="c in store.pendingCases" :key="c.case_id" class="hover:bg-bg2 transition-colors">
               <td class="px-3 py-3 border-b border-bd font-mono font-medium">{{ c.case_id }}</td>
-              <td class="px-3 py-3 border-b border-bd">{{ c.patient_data.age }} thn / {{ c.patient_data.gender === 'm' ? 'L' : 'P' }}</td>
+              <td class="px-3 py-3 border-b border-bd">{{ c.patient_data.age }} thn / BMI {{ c.patient_data.bmi.toFixed(1) }}</td>
               <td class="px-3 py-3 border-b border-bd capitalize">
                 <span :class="['badge', c.patient_data.disease_type === 'none' ? 'b-green' : 'b-red']">{{ c.patient_data.disease_type }}</span>
               </td>

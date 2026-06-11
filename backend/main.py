@@ -22,15 +22,15 @@ ALGORITHM = "HS256"
 # Pydantic Models
 class PatientData(BaseModel):
     age: int
-    gender: str
-    height: float
-    weight: float
     bmi: float
     disease_type: str
     blood_pressure_sys: float = None
-    blood_pressure_dia: float = None
     cholesterol: float = None
     glucose: float = None
+    gender: Optional[str] = None
+    height: Optional[float] = None
+    weight: Optional[float] = None
+    blood_pressure_dia: Optional[float] = None
 
 class LoginData(BaseModel):
     username: str

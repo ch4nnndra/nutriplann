@@ -23,9 +23,6 @@
               <div class="text-tx3 font-medium">Usia</div><div class="text-tx">{{ caseData.patient_data.age }} tahun</div>
             </div>
             <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
-              <div class="text-tx3 font-medium">Jenis kelamin</div><div class="text-tx">{{ caseData.patient_data.gender === 'm' ? 'Laki-laki' : 'Perempuan' }}</div>
-            </div>
-            <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
               <div class="text-tx3 font-medium">BMI</div><div class="text-tx">{{ caseData.patient_data.bmi.toFixed(1) }}</div>
             </div>
             <div class="grid grid-cols-[110px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
