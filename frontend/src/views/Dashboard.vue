@@ -4,7 +4,7 @@
     <div class="flex-1 p-6 px-7 bg-bg2">
       <div class="mb-5">
         <h1 class="text-[20px] font-semibold tracking-tight">Dashboard</h1>
-        <div class="text-[12px] text-tx2 mt-0.5">Selamat datang, dr. Wayan Supriana</div>
+        <div class="text-[12px] text-tx2 mt-0.5">Selamat datang, dr. Wayan</div>
       </div>
 
       <div class="grid grid-cols-4 gap-3 mb-5">
