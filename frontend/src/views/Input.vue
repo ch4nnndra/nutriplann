@@ -5,14 +5,19 @@
     <!-- Step indicator -->
     <div class="flex px-6 py-4 bg-bg border-b border-bd">
       <div :class="['flex-1 flex items-center gap-2 relative', step > 1 ? 'done' : step === 1 ? 'act' : '']">
-        <div class="w-[26px] h-[26px] rounded-full text-[11px] font-semibold flex items-center justify-center z-10 transition-all"
-             :class="step >= 1 ? 'bg-t text-white' : 'bg-bg3 text-tx3'">1</div>
-        <div :class="['text-[11px] font-medium z-10 whitespace-nowrap', step > 1 ? 'text-tx2' : step === 1 ? 'text-[#085041]' : 'text-tx3']">Data fisik</div>
+        <div
+          class="w-[26px] h-[26px] rounded-full text-[11px] font-semibold flex items-center justify-center z-10 transition-all"
+          :class="step >= 1 ? 'bg-t text-white' : 'bg-bg3 text-tx3'">1</div>
+        <div
+          :class="['text-[11px] font-medium z-10 whitespace-nowrap', step > 1 ? 'text-tx2' : step === 1 ? 'text-[#085041]' : 'text-tx3']">
+          Data fisik</div>
       </div>
       <div :class="['flex-1 flex items-center gap-2 relative', step === 2 ? 'act' : '']">
-        <div class="w-[26px] h-[26px] rounded-full text-[11px] font-semibold flex items-center justify-center z-10 transition-all"
-             :class="step >= 2 ? 'bg-t text-white' : 'bg-bg3 text-tx3'">2</div>
-        <div :class="['text-[11px] font-medium z-10 whitespace-nowrap', step === 2 ? 'text-[#085041]' : 'text-tx3']">Data medis</div>
+        <div
+          class="w-[26px] h-[26px] rounded-full text-[11px] font-semibold flex items-center justify-center z-10 transition-all"
+          :class="step >= 2 ? 'bg-t text-white' : 'bg-bg3 text-tx3'">2</div>
+        <div :class="['text-[11px] font-medium z-10 whitespace-nowrap', step === 2 ? 'text-[#085041]' : 'text-tx3']">
+          Data medis</div>
       </div>
     </div>
 
@@ -22,7 +27,8 @@
         <!-- Step 1: Data Fisik -->
         <div v-show="step === 1">
           <div class="bg-bg border border-bd rounded-r12 p-5 mb-3">
-            <div class="text-[12px] font-semibold uppercase tracking-widest text-t mb-3.5 flex items-center gap-1.5 border-b border-t50 pb-2">
+            <div
+              class="text-[12px] font-semibold uppercase tracking-widest text-t mb-3.5 flex items-center gap-1.5 border-b border-t50 pb-2">
               <IconUser size="16" /> Data fisik
             </div>
 
@@ -54,7 +60,8 @@
                   <div class="text-[13px] font-semibold" :class="bmiColor">{{ bmiCategory }}</div>
                   <div class="text-[11px] text-tx3 mt-0.5">{{ bmiDesc }}</div>
                   <div class="h-[6px] bg-bg3 rounded-full mt-2 overflow-hidden">
-                    <div class="h-full rounded-full transition-all" :class="bmiColor.replace('text-', 'bg-')" :style="{ width: Math.min((bmi / 40) * 100, 100) + '%' }"></div>
+                    <div class="h-full rounded-full transition-all" :class="bmiColor.replace('text-', 'bg-')"
+                      :style="{ width: Math.min((bmi / 40) * 100, 100) + '%' }"></div>
                   </div>
                 </div>
               </div>
@@ -63,7 +70,8 @@
 
           <div class="flex justify-end py-4 border-t border-bd mt-2">
             <button class="btn btn-t" @click="goStep2" :disabled="!canStep2">
-              Selanjutnya <IconArrowRight size="16" />
+              Selanjutnya
+              <IconArrowRight size="16" />
             </button>
           </div>
         </div>
@@ -71,7 +79,8 @@
         <!-- Step 2: Data Medis -->
         <div v-show="step === 2">
           <div class="bg-bg border border-bd rounded-r12 p-5 mb-3">
-            <div class="text-[12px] font-semibold uppercase tracking-widest text-t mb-3.5 flex items-center gap-1.5 border-b border-t50 pb-2">
+            <div
+              class="text-[12px] font-semibold uppercase tracking-widest text-t mb-3.5 flex items-center gap-1.5 border-b border-t50 pb-2">
               <IconHeartRateMonitor size="16" /> Data medis
             </div>
 
@@ -116,14 +125,20 @@
               <span class="text-tx2">BMI:</span> <strong :class="bmiColor">{{ bmiFormatted }}</strong>
               <span class="text-tx3 ml-1">({{ bmiCategory }})</span>
             </div>
-            <button class="btn btn-out btn-sm" @click="step = 1"><IconArrowLeft size="13" /> Edit</button>
+            <button class="btn btn-out btn-sm" @click="step = 1">
+              <IconArrowLeft size="13" /> Edit
+            </button>
           </div>
 
           <div class="flex justify-between py-4 border-t border-bd mt-2">
-            <button class="btn btn-out" @click="step = 1"><IconArrowLeft size="16" /> Sebelumnya</button>
+            <button class="btn btn-out" @click="step = 1">
+              <IconArrowLeft size="16" /> Sebelumnya
+            </button>
             <button class="btn btn-t btn-t-lg" @click="submit" :disabled="loading">
               <span v-if="loading">Menganalisis...</span>
-              <span v-else><IconSparkles size="16" /> Analisis & dapatkan program</span>
+              <span v-else class="inline-flex items-center gap-2">
+                <IconSparkles size="16" /> Analisis & dapatkan program
+              </span>
             </button>
           </div>
         </div>
@@ -171,24 +186,24 @@ const bmiFormatted = computed(() => bmi.value ? bmi.value.toFixed(1) : '—')
 const bmiCategory = computed(() => {
   if (!bmi.value) return 'Masukkan tinggi & berat badan'
   if (bmi.value < 18.5) return 'Berat Badan Kurang'
-  if (bmi.value < 25)   return 'Normal'
-  if (bmi.value < 30)   return 'Kelebihan Berat Badan'
+  if (bmi.value < 25) return 'Normal'
+  if (bmi.value < 30) return 'Kelebihan Berat Badan'
   return 'Obesitas'
 })
 
 const bmiDesc = computed(() => {
   if (!bmi.value) return ''
   if (bmi.value < 18.5) return 'Di bawah rentang berat badan ideal'
-  if (bmi.value < 25)   return 'Dalam rentang berat badan ideal'
-  if (bmi.value < 30)   return 'Sedikit di atas berat badan ideal'
+  if (bmi.value < 25) return 'Dalam rentang berat badan ideal'
+  if (bmi.value < 30) return 'Sedikit di atas berat badan ideal'
   return 'Jauh di atas berat badan ideal'
 })
 
 const bmiColor = computed(() => {
   if (!bmi.value) return 'text-tx3'
   if (bmi.value < 18.5) return 'text-[#185FA5]'
-  if (bmi.value < 25)   return 'text-t'
-  if (bmi.value < 30)   return 'text-am'
+  if (bmi.value < 25) return 'text-t'
+  if (bmi.value < 30) return 'text-am'
   return 'text-[#C0392B]'
 })
 
@@ -204,12 +219,11 @@ const submit = async () => {
     age: form.value.age,
     bmi: parseFloat(bmi.value.toFixed(2)),
     disease_type: form.value.disease_type,
-    blood_pressure_sys: form.value.blood_pressure_sys || 120,
+    blood_pressure: form.value.blood_pressure_sys || 120,
     cholesterol: form.value.cholesterol || 200,
-    glucose: form.value.glucose || 100,
-    height: form.value.height,
-    weight: form.value.weight,
+    glucose: form.value.glucose || 100
   }
+  console.log(data)
   try {
     await store.submitRecommendation(data)
     router.push('/result')

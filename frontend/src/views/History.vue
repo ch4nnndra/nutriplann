@@ -14,23 +14,43 @@
         <table v-else class="w-full text-[13px] border-collapse">
           <thead>
             <tr>
-              <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">ID Kasus</th>
-              <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Usia / BMI</th>
-              <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Kondisi Medis</th>
-              <th class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">Status</th>
+              <th
+                class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
+                ID Kasus</th>
+              <th
+                class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
+                Usia / BMI</th>
+              <th
+                class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
+                Tekanan Darah</th>
+              <th
+                class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
+                Kolesterol</th>
+              <th
+                class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
+                Glukosa</th>
+              <th
+                class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
+                Kondisi Medis</th>
+              <th
+                class="px-3 py-3 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
+                Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="c in store.historyCases" :key="c.case_id" class="hover:bg-bg2 transition-colors">
-              <td class="px-3 py-3 border-b border-bd font-mono font-medium">{{ c.case_id }}</td>
-              <td class="px-3 py-3 border-b border-bd">{{ c.patient_data.age }} thn / BMI {{ c.patient_data.bmi.toFixed(1) }}</td>
+            <tr v-for="c in store.historyCases" :key="c.patient_id" class="hover:bg-bg2 transition-colors">
+              <td class="px-3 py-3 border-b border-bd font-mono font-medium">{{ c.patient_id }}</td>
+              <td class="px-3 py-3 border-b border-bd">{{ c.age }} thn / BMI {{ parseFloat(c.bmi).toFixed(1) }}</td>
+              <td class="px-3 py-3 border-b border-bd font-mono font-medium">{{ c.blood_pressure }}</td>
+              <td class="px-3 py-3 border-b border-bd font-mono font-medium">{{ c.cholesterol }}</td>
+              <td class="px-3 py-3 border-b border-bd font-mono font-medium">{{ c.glucose }}</td>
               <td class="px-3 py-3 border-b border-bd capitalize">
-                <span :class="['badge', c.patient_data.disease_type === 'none' ? 'b-green' : 'b-red']">{{ c.patient_data.disease_type }}</span>
+                <span :class="['badge', c.disease_type === 'none' ? 'b-green' : 'b-red']">{{ c.disease_type }}</span>
               </td>
               <td class="px-3 py-3 border-b border-bd">
-                <span class="badge b-green" v-if="c.status === 'approved'">Disetujui</span>
-                <span class="badge b-amber" v-else-if="c.status === 'revised'">Direvisi</span>
-                <span class="badge b-red" v-else>Ditolak</span>
+                <!-- <span class="badge b-green" v-if="c.status === 'approved'">Disetujui</span> -->
+                <span class="badge b-green">Direvisi</span>
+                <!-- <span class="badge b-red" v-else>Ditolak</span> -->
               </td>
             </tr>
           </tbody>
