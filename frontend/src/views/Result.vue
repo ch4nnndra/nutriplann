@@ -12,9 +12,9 @@
           <IconArrowLeft size="14" class="inline" /> Ubah data
         </div>
       </div>
-      <span class="badge b-teal" v-if="result?.diet_recommendation_label">
-        <IconCheck size="14" /> Rekomendasi tersedia
-      </span>
+      <span v-if="isReuse" class="badge b-teal"><IconCheck size="14" /> Rekomendasi tersedia</span>
+      <span v-else-if="isRevise" class="badge b-amber"><IconAlertTriangle size="14" /> Rekomendasi tersedia</span>
+      <span v-else-if="result" class="badge b-red"><IconClock size="14" /> Menunggu tinjauan pakar</span>
     </nav>
 
     <div v-if="!result" class="p-10 text-center text-tx2">
@@ -39,8 +39,7 @@
           </div>
           <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
             <div class="text-tx3 font-medium">Jenis penyakit</div>
-            <div class="text-tx capitalize">{{ patient.disease_type === 'none' ? 'Tidak ada' : patient.disease_type }}
-            </div>
+            <div class="text-tx capitalize">{{ patient.disease_type === 'none' ? 'Tidak ada' : patient.disease_type }}</div>
           </div>
           <div class="grid grid-cols-[130px_1fr] gap-1 py-1.5 border-b border-bd text-[12px]">
             <div class="text-tx3 font-medium">Tekanan darah</div>
@@ -56,102 +55,45 @@
           </div>
         </div>
 
-        <!-- Program diet -->
-        <div class="card">
-          <div class="card-t">
-            <IconSparkles size="16" /> Program diet untukmu
-          </div>
-          <span class="badge b-teal mb-3" v-if="result.diet_recommendation_label">
-            <IconCheck size="12" /> Direkomendasikan sistem
-          </span>
-          <span class="badge b-red mb-3" v-else>
-            <IconX size="12" /> Tidak ada solusi
-          </span>
+        <!-- Program diet — REUSE -->
+        <div v-if="isReuse" class="card">
+          <div class="card-t"><IconSparkles size="16" /> Program diet untukmu</div>
+          <span class="badge b-teal mb-3"><IconCheck size="12" /> Direkomendasikan sistem</span>
           <div class="text-[22px] font-semibold tracking-tight capitalize mb-1">
-            {{ result.diet_recommendation_label ? humanizeLabel(result.diet_recommendation_label) :
-              'Solusi tidak ditemukan' }}
+            {{ humanizeLabel(result.diet_recommendation_label) }}
           </div>
-          <div class="text-[12px] text-tx2 mb-4" v-if="result.diet_recommendation_label && result.status == 'REUSE'">
-            Berdasarkan analisis kemiripan profil kondisimu dengan {{ result.top_cases.length }} data klinis
-            referensi.
+          <div class="text-[12px] text-tx2 mb-4">
+            Program diet ini dipilih karena profil kesehatanmu sangat mirip dengan data pasien sebelumnya yang telah ditangani.
           </div>
-          <div class="text-[12px] text-tx2 mb-4"
-            v-else-if="result.status == 'NEEDS_EXPERT_REVISION' || result.status == 'REVISE'">
-            {{ result.message }}
-          </div>
-          <div class="sep"></div>
-          <!-- <div class="card-t">
-            <IconChartPie size="16" /> Estimasi target nutrisi harian
-          </div>
-          <div class="grid grid-cols-4 gap-2">
-            <div class="bg-bg2 rounded-r8 p-2 text-center">
-              <div class="text-[9px] font-semibold uppercase text-tx3 mb-0.5">Kalori</div>
-              <div class="text-[18px] font-semibold leading-none text-am">1.800</div>
-              <div class="text-[9px] text-tx3">kkal</div>
-            </div>
-            <div class="bg-bg2 rounded-r8 p-2 text-center">
-              <div class="text-[9px] font-semibold uppercase text-tx3 mb-0.5">Protein</div>
-              <div class="text-[18px] font-semibold leading-none text-t">90</div>
-              <div class="text-[9px] text-tx3">gram</div>
-            </div>
-            <div class="bg-bg2 rounded-r8 p-2 text-center">
-              <div class="text-[9px] font-semibold uppercase text-tx3 mb-0.5">Karbo</div>
-              <div class="text-[18px] font-semibold leading-none text-p400">150</div>
-              <div class="text-[9px] text-tx3">gram</div>
-            </div>
-            <div class="bg-bg2 rounded-r8 p-2 text-center">
-              <div class="text-[9px] font-semibold uppercase text-tx3 mb-0.5">Lemak</div>
-              <div class="text-[18px] font-semibold leading-none text-[#185FA5]">60</div>
-              <div class="text-[9px] text-tx3">gram</div>
-            </div>
-          </div> -->
         </div>
-      </div>
 
-      <!-- Kasus serupa -->
-      <div class="card mb-3">
-        <div class="card-t">
-          <IconUsers size="16" /> Kasus serupa dari data referensi (CBR)
+        <!-- Program diet — REVISE (rule-based) -->
+        <div v-else-if="isRevise" class="card">
+          <div class="card-t"><IconSparkles size="16" /> Program diet untukmu</div>
+          <span class="badge b-amber mb-3"><IconAlertTriangle size="12" /> Berdasarkan kondisi kesehatanmu</span>
+          <div class="text-[22px] font-semibold tracking-tight capitalize mb-1">
+            {{ humanizeLabel(result.diet_recommendation_label) }}
+          </div>
+          <div class="text-[12px] text-tx2 mb-4">
+            Rekomendasi ini diberikan berdasarkan analisis kondisi kesehatan yang kamu masukkan.
+          </div>
         </div>
-        <table class="w-full text-[13px] border-collapse">
-          <thead>
-            <tr>
-              <th
-                class="px-3 py-2 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
-                #</th>
-              <th
-                class="px-3 py-2 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
-                Kondisi</th>
-              <th
-                class="px-3 py-2 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
-                BMI</th>
-              <th
-                class="px-3 py-2 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
-                Kemiripan</th>
-              <th
-                class="px-3 py-2 text-left text-[11px] font-medium text-tx2 bg-bg2 border-b border-bd uppercase tracking-wider">
-                Rekomendasi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(sim, index) in result.top_cases" :key="index" class="hover:bg-bg2">
-              <td class="px-3 py-2 border-b border-bd">{{ index + 1 }}</td>
-              <td class="px-3 py-2 border-b border-bd capitalize">{{ sim.disease_type }}</td>
-              <td class="px-3 py-2 border-b border-bd">{{ sim.bmi.toFixed(1) }}</td>
-              <td class="px-3 py-2 border-b border-bd">
-                <div class="flex items-center gap-2">
-                  <div class="flex-1 h-[5px] bg-bg3 rounded-full overflow-hidden">
-                    <div class="h-full bg-t rounded-full" :style="{ width: (sim.global_similarity * 100) + '%' }"></div>
-                  </div>
-                  <div class="text-[11px] font-medium text-[#085041] min-w-[32px] text-right">{{
-                    (sim.global_similarity * 100).toFixed(1) }}%</div>
-                </div>
-              </td>
-              <td class="px-3 py-2 border-b border-bd capitalize">{{ sim.diet_recommendation?.replaceAll('_', ' ')
-              }}</td>
-            </tr>
-          </tbody>
-        </table>
+
+        <!-- NEEDS_EXPERT_REVISION -->
+        <div v-else class="card">
+          <div class="card-t"><IconClock size="16" /> Status rekomendasi</div>
+          <span class="badge b-red mb-3"><IconClock size="12" /> Menunggu tinjauan pakar</span>
+          <div class="text-[22px] font-semibold tracking-tight text-[#C0392B] mb-1">
+            Belum ada rekomendasi
+          </div>
+          <div class="text-[12px] text-tx2 mb-4">
+            Kondisi kesehatanmu memerlukan perhatian khusus sehingga sistem belum dapat memberikan rekomendasi secara otomatis.
+          </div>
+          <div class="bg-[#FFF0F0] border border-[#FFCDD2] rounded-r8 p-3 text-[12px] text-[#B71C1C]">
+            Data kamu telah dikirim ke dokter/ahli gizi untuk ditinjau.
+            Rekomendasi diet yang tepat akan segera tersedia setelah ditinjau.
+          </div>
+        </div>
       </div>
 
       <div class="bg-bg border border-bd rounded-r12 p-4 flex justify-end gap-2.5">
@@ -169,9 +111,7 @@ import { useRouter } from 'vue-router'
 import { useNutriStore } from '@/stores/useNutriStore'
 import {
   IconLeaf, IconArrowLeft, IconCheck, IconUser,
-  IconSparkles, IconChartPie, IconUsers, IconRefresh,
-  IconXMark,
-  IconX
+  IconSparkles, IconRefresh, IconAlertTriangle, IconClock
 } from '@tabler/icons-vue'
 import { humanizeLabel } from '../utils/helper'
 
@@ -179,6 +119,8 @@ const router = useRouter()
 const store = useNutriStore()
 
 const result = computed(() => store.recommendationResult)
-console.log(result.value)
 const patient = computed(() => store.patientData)
+
+const isReuse = computed(() => result.value?.status === 'REUSE')
+const isRevise = computed(() => result.value?.status === 'REVISE')
 </script>
